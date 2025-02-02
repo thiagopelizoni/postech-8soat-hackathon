@@ -9,45 +9,22 @@ RSpec.configure do |config|
     'v1/swagger.yaml' => {
       openapi: '3.0.1',
       info: {
-        title: 'API Pedidos',
+        title: 'API Clientes',
         version: 'v1'
       },
       paths: {},
       components: {
         schemas: {
-          Pedido: {
+          Cliente: {
             type: :object,
             properties: {
-              id: { type: :string },
-              cliente: {
-                type: [:object, 'null'],
-                properties: {
-                  nome: { type: :string },
-                  email: { type: :string },
-                  cpf: { type: :integer },
-                  token: { type: :string }
-                }
-              },
-              produtos: {
-                type: :array,
-                items: {
-                  type: :object,
-                  properties: {
-                    id: { type: :integer },
-                    slug: { type: :string },
-                    nome: { type: :string },
-                    preco: { type: :integer }
-                  }
-                }
-              },
-              valor: { type: :integer },
-              status: { type: :string },
-              observacao: { type: :string },
-              data: { type: :string, format: :date_time },
-              data_status: { type: :string, format: :date_time },
-              pagamento: { type: :string }
+              id: { type: :string, description: 'ID do Cliente' },
+              nome: { type: :string, description: 'Nome completo do Cliente' },
+              data_nascimento: { type: :string, format: :date, description: 'Data de nascimento do Cliente (YYYY-MM-DD)' },
+              cpf: { type: :string, description: 'CPF do Cliente (11 dígitos, sem formatação)', example: '12345678901' },
+              email: { type: :string, format: :email, description: 'E-mail do Cliente' }
             },
-            required: %w[id produtos valor status data data_status pagamento]
+            required: %w[nome data_nascimento cpf email]
           }
         }
       }
