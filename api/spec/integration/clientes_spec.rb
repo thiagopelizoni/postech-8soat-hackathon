@@ -1,7 +1,7 @@
 require 'swagger_helper'
 
 RSpec.describe 'Clientes API', type: :request do
-  path '/api/v1/clientes' do
+  path '/clientes' do
     get 'Lista todos os clientes' do
       tags 'Clientes'
       produces 'application/json'
@@ -43,7 +43,7 @@ RSpec.describe 'Clientes API', type: :request do
     end
   end
 
-  path '/api/v1/clientes/{id}' do
+  path '/clientes/{id}' do
     get 'Obtém detalhes de um cliente' do
       tags 'Clientes'
       produces 'application/json'

@@ -4,9 +4,5 @@ Rails.application.routes.draw do
 
   root to: redirect('/api-docs')
 
-  namespace :api do
-    namespace :v1 do
-      resources :clientes, only: %i[index show create update]
-    end
-  end
+  resources :clientes, only: %i[index show create update]
 end

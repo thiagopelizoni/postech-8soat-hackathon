@@ -1,317 +1,125 @@
 ---
 openapi: 3.0.1
 info:
-  title: API Pedidos
+  title: API Clientes
   version: v1
 paths:
-  "/pedidos":
+  "/clientes":
     get:
-      summary: Listar Pedidos
-      parameters:
-      - name: page
-        in: query
-        description: Número da página
-        schema:
-          type: integer
-      - name: per_page
-        in: query
-        description: Número de itens por página
-        schema:
-          type: integer
+      summary: Lista todos os clientes
       tags:
-      - Pedidos
+      - Clientes
       responses:
         '200':
-          description: pedidos encontrados
+          description: Lista de clientes retornada com sucesso
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/Pedido"
+                  "$ref": "#/components/schemas/Cliente"
     post:
-      summary: Criar Pedido
+      summary: Cria um novo cliente
       tags:
-      - Pedidos
+      - Clientes
       parameters: []
       responses:
         '201':
-          description: pedido criado
+          description: Cliente criado com sucesso
+        '422':
+          description: Dados inválidos
       requestBody:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/Pedido"
-  "/pedidos/{id}":
+              type: object
+              properties:
+                nome:
+                  type: string
+                data_nascimento:
+                  type: string
+                  format: date
+                cpf:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              required:
+              - nome
+              - data_nascimento
+              - cpf
+              - email
+  "/clientes/{id}":
     get:
-      summary: Exibir Pedido
+      summary: Obtém detalhes de um cliente
       tags:
-      - Pedidos
+      - Clientes
       parameters:
       - name: id
         in: path
+        description: ID do Cliente
         required: true
         schema:
           type: string
       responses:
         '200':
-          description: pedido encontrado
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Pedido"
-    put:
-      summary: Atualizar Pedido
+          description: Cliente encontrado
+        '404':
+          description: Cliente não encontrado
+    patch:
+      summary: Atualiza um cliente
       tags:
-      - Pedidos
+      - Clientes
       parameters:
       - name: id
         in: path
+        description: ID do Cliente
         required: true
         schema:
           type: string
       responses:
         '200':
-          description: pedido atualizado
+          description: Cliente atualizado com sucesso
+        '404':
+          description: Cliente não encontrado
+        '422':
+          description: Dados inválidos
       requestBody:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/Pedido"
-  "/pedidos/prontos":
-    get:
-      summary: Listar pedidos prontos
-      tags:
-      - Pedidos
-      responses:
-        '200':
-          description: pedidos encontrados
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Pedido"
-  "/pedidos/recebidos":
-    get:
-      summary: Listar pedidos recebidos
-      tags:
-      - Pedidos
-      responses:
-        '200':
-          description: pedidos encontrados
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Pedido"
-  "/pedidos/em-preparacao":
-    get:
-      summary: Listar pedidos em preparacao
-      tags:
-      - Pedidos
-      responses:
-        '200':
-          description: pedidos encontrados
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Pedido"
-  "/pedidos/finalizados":
-    get:
-      summary: Listar pedidos finalizados
-      tags:
-      - Pedidos
-      responses:
-        '200':
-          description: pedidos encontrados
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Pedido"
-  "/pedidos/pagamento-confirmado":
-    get:
-      summary: Listar pedidos pagamento confirmado
-      tags:
-      - Pedidos
-      responses:
-        '200':
-          description: pedidos encontrados
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Pedido"
-  "/pedidos/pagamento-em-aberto":
-    get:
-      summary: Listar pedidos pagamento em aberto
-      tags:
-      - Pedidos
-      responses:
-        '200':
-          description: pedidos encontrados
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Pedido"
-  "/pedidos/pagamento-recusado":
-    get:
-      summary: Listar pedidos pagamento recusado
-      tags:
-      - Pedidos
-      responses:
-        '200':
-          description: pedidos encontrados
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Pedido"
-  "/pedidos/{id}/pagar":
-    put:
-      summary: Atualizar pedido para pagar
-      tags:
-      - Pedidos
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: pedido atualizado
-  "/pedidos/{id}/receber":
-    put:
-      summary: Atualizar pedido para receber
-      tags:
-      - Pedidos
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: pedido atualizado
-  "/pedidos/{id}/preparar":
-    put:
-      summary: Atualizar pedido para preparar
-      tags:
-      - Pedidos
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: pedido atualizado
-  "/pedidos/{id}/pronto":
-    put:
-      summary: Atualizar pedido para pronto
-      tags:
-      - Pedidos
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: pedido atualizado
-  "/pedidos/{id}/finalizar":
-    put:
-      summary: Atualizar pedido para finalizar
-      tags:
-      - Pedidos
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: pedido atualizado
-  "/pedidos/{id}/qr-code":
-    get:
-      summary: Obter QR Code de pagamento
-      tags:
-      - Pedidos
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: QR Code gerado
+              type: object
+              properties:
+                nome:
+                  type: string
+                email:
+                  type: string
+                  format: email
 components:
   schemas:
-    Pedido:
+    Cliente:
       type: object
       properties:
         id:
           type: string
-        cliente:
-          type:
-          - object
-          - 'null'
-          properties:
-            nome:
-              type: string
-            email:
-              type: string
-            cpf:
-              type: integer
-            token:
-              type: string
-        produtos:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-              slug:
-                type: string
-              nome:
-                type: string
-              preco:
-                type: integer
-        valor:
-          type: integer
-        status:
+          description: ID do Cliente
+        nome:
           type: string
-        observacao:
+          description: Nome completo do Cliente
+        data_nascimento:
           type: string
-        data:
+          format: date
+          description: Data de nascimento do Cliente (YYYY-MM-DD)
+        cpf:
           type: string
-          format: date_time
-        data_status:
+          description: CPF do Cliente (11 dígitos, sem formatação)
+          example: '12345678901'
+        email:
           type: string
-          format: date_time
-        pagamento:
-          type: string
+          format: email
+          description: E-mail do Cliente
       required:
-      - id
-      - produtos
-      - valor
-      - status
-      - data
-      - data_status
-      - pagamento
+      - nome
+      - data_nascimento
+      - cpf
+      - email

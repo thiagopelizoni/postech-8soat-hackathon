@@ -3,17 +3,17 @@ class ClientesController < ApplicationController
 
   def index
     clientes = Cliente.all
-    render json: ClienteSerializer.new(clientes).serializable_hash, status: :ok
+    render json: clientes, status: :ok
   end
 
   def show
-    render json: ClienteSerializer.new(@cliente).serializable_hash, status: :ok
+    render json: @cliente, status: :ok
   end
 
   def create
     cliente = Cliente.new(cliente_params)
     if cliente.save
-      render json: ClienteSerializer.new(cliente).serializable_hash, status: :created
+      render json: cliente, status: :created
     else
       render json: { errors: cliente.errors.full_messages }, status: :unprocessable_entity
     end
@@ -21,7 +21,7 @@ class ClientesController < ApplicationController
 
   def update
     if @cliente.update(cliente_params)
-      render json: ClienteSerializer.new(@cliente).serializable_hash, status: :ok
+      render json: @cliente, status: :ok
     else
       render json: { errors: @cliente.errors.full_messages }, status: :unprocessable_entity
     end
@@ -39,4 +39,3 @@ class ClientesController < ApplicationController
     params.require(:cliente).permit(:nome, :data_nascimento, :cpf, :email)
   end
 end
-  
