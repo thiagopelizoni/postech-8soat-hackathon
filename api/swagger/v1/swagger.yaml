@@ -1,0 +1,317 @@
+---
+openapi: 3.0.1
+info:
+  title: API Pedidos
+  version: v1
+paths:
+  "/pedidos":
+    get:
+      summary: Listar Pedidos
+      parameters:
+      - name: page
+        in: query
+        description: Número da página
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        description: Número de itens por página
+        schema:
+          type: integer
+      tags:
+      - Pedidos
+      responses:
+        '200':
+          description: pedidos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Pedido"
+    post:
+      summary: Criar Pedido
+      tags:
+      - Pedidos
+      parameters: []
+      responses:
+        '201':
+          description: pedido criado
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Pedido"
+  "/pedidos/{id}":
+    get:
+      summary: Exibir Pedido
+      tags:
+      - Pedidos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: pedido encontrado
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Pedido"
+    put:
+      summary: Atualizar Pedido
+      tags:
+      - Pedidos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: pedido atualizado
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Pedido"
+  "/pedidos/prontos":
+    get:
+      summary: Listar pedidos prontos
+      tags:
+      - Pedidos
+      responses:
+        '200':
+          description: pedidos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Pedido"
+  "/pedidos/recebidos":
+    get:
+      summary: Listar pedidos recebidos
+      tags:
+      - Pedidos
+      responses:
+        '200':
+          description: pedidos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Pedido"
+  "/pedidos/em-preparacao":
+    get:
+      summary: Listar pedidos em preparacao
+      tags:
+      - Pedidos
+      responses:
+        '200':
+          description: pedidos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Pedido"
+  "/pedidos/finalizados":
+    get:
+      summary: Listar pedidos finalizados
+      tags:
+      - Pedidos
+      responses:
+        '200':
+          description: pedidos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Pedido"
+  "/pedidos/pagamento-confirmado":
+    get:
+      summary: Listar pedidos pagamento confirmado
+      tags:
+      - Pedidos
+      responses:
+        '200':
+          description: pedidos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Pedido"
+  "/pedidos/pagamento-em-aberto":
+    get:
+      summary: Listar pedidos pagamento em aberto
+      tags:
+      - Pedidos
+      responses:
+        '200':
+          description: pedidos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Pedido"
+  "/pedidos/pagamento-recusado":
+    get:
+      summary: Listar pedidos pagamento recusado
+      tags:
+      - Pedidos
+      responses:
+        '200':
+          description: pedidos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Pedido"
+  "/pedidos/{id}/pagar":
+    put:
+      summary: Atualizar pedido para pagar
+      tags:
+      - Pedidos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: pedido atualizado
+  "/pedidos/{id}/receber":
+    put:
+      summary: Atualizar pedido para receber
+      tags:
+      - Pedidos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: pedido atualizado
+  "/pedidos/{id}/preparar":
+    put:
+      summary: Atualizar pedido para preparar
+      tags:
+      - Pedidos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: pedido atualizado
+  "/pedidos/{id}/pronto":
+    put:
+      summary: Atualizar pedido para pronto
+      tags:
+      - Pedidos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: pedido atualizado
+  "/pedidos/{id}/finalizar":
+    put:
+      summary: Atualizar pedido para finalizar
+      tags:
+      - Pedidos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: pedido atualizado
+  "/pedidos/{id}/qr-code":
+    get:
+      summary: Obter QR Code de pagamento
+      tags:
+      - Pedidos
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: QR Code gerado
+components:
+  schemas:
+    Pedido:
+      type: object
+      properties:
+        id:
+          type: string
+        cliente:
+          type:
+          - object
+          - 'null'
+          properties:
+            nome:
+              type: string
+            email:
+              type: string
+            cpf:
+              type: integer
+            token:
+              type: string
+        produtos:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              slug:
+                type: string
+              nome:
+                type: string
+              preco:
+                type: integer
+        valor:
+          type: integer
+        status:
+          type: string
+        observacao:
+          type: string
+        data:
+          type: string
+          format: date_time
+        data_status:
+          type: string
+          format: date_time
+        pagamento:
+          type: string
+      required:
+      - id
+      - produtos
+      - valor
+      - status
+      - data
+      - data_status
+      - pagamento

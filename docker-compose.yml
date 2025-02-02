@@ -1,0 +1,27 @@
+services:
+  api:
+    build:
+      context: .
+    command: bash -c "ruby lib/db_setup.rb && rm -f tmp/pids/server.pid && rails server -b '0.0.0.0'"
+    restart: always
+    ports:
+      - "${RAILS_PORT}:3000"
+    volumes:
+      - ./api:/api
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: mongo:latest
+    restart: always
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+
+volumes:
+  mongodb_data:

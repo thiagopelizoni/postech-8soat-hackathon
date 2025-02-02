@@ -1,0 +1,14 @@
+development:
+  clients:
+    default:
+      uri: "mongodb://<%= ENV.fetch('MONGO_USERNAME') %>:<%= ENV.fetch('MONGO_PASSWORD') %>@db:<%= ENV.fetch('MONGO_PORT', 27017) %>/development?authSource=admin"
+
+test:
+  clients:
+    default:
+      uri: "mongodb://<%= ENV.fetch('MONGO_USERNAME') %>:<%= ENV.fetch('MONGO_PASSWORD') %>@db:<%= ENV.fetch('MONGO_PORT', 27017) %>/test?authSource=admin"
+
+production:
+  clients:
+    default:
+      uri: "mongodb://<%= ENV.fetch('MONGO_USERNAME') %>:<%= ENV.fetch('MONGO_PASSWORD') %>@db:<%= ENV.fetch('MONGO_PORT', 27017) %>/production?authSource=admin"

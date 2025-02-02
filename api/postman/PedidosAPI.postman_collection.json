@@ -1,0 +1,437 @@
+{
+    "info": {
+      "name": "Pedidos API Collection",
+      "_postman_id": "12345678-1234-1234-1234-123456789012",
+      "description": "Coleção de testes para a API de Pedidos.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "GET /pedidos",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos"]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/:id",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}"]
+          }
+        }
+      },
+      {
+        "name": "POST /pedidos (Create - Válido)",
+        "request": {
+          "method": "POST",
+          "header": [
+            { "key": "Content-Type", "value": "application/json" },
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"pedido\": {\n    \"cliente\": {\n      \"nome\": \"Test\",\n      \"email\": \"test@example.com\",\n      \"cpf\": \"12345678901\",\n      \"token\": \"abc123\"\n    },\n    \"produtos\": [\n      { \"id\": 1, \"slug\": \"produto-1\", \"nome\": \"Produto 1\", \"preco\": 10 }\n    ],\n    \"observacao\": \"Observação válida\",\n    \"pagamento\": \"em_aberto\"\n  }\n}"
+          },
+          "url": {
+            "raw": "http://localhost:3030/pedidos",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos"]
+          }
+        }
+      },
+      {
+        "name": "POST /pedidos (Create - Inválido)",
+        "request": {
+          "method": "POST",
+          "header": [
+            { "key": "Content-Type", "value": "application/json" },
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"pedido\": {\n    \"cliente\": {\n      \"nome\": \"Test\",\n      \"email\": \"test@example.com\",\n      \"cpf\": \"12345678901\",\n      \"token\": \"abc123\"\n    },\n    \"produtos\": [\n      { \"id\": 1, \"slug\": \"produto-1\", \"nome\": \"Produto 1\", \"preco\": 10 }\n    ],\n    \"observacao\": \"Observação válida\",\n    \"pagamento\": \"em_aberto\",\n    \"status\": \"recebido\"\n  }\n}"
+          },
+          "url": {
+            "raw": "http://localhost:3030/pedidos",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos"]
+          }
+        }
+      },
+      {
+        "name": "PUT /pedidos/:id (Update Válido)",
+        "request": {
+          "method": "PUT",
+          "header": [
+            { "key": "Content-Type", "value": "application/json" },
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"pedido\": {\n    \"observacao\": \"Obs Atualizada\",\n    \"status\": \"em_preparacao\"\n  }\n}"
+          },
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}"]
+          }
+        }
+      },
+      {
+        "name": "PUT /pedidos/:id (Update Inválido - Status)",
+        "request": {
+          "method": "PUT",
+          "header": [
+            { "key": "Content-Type", "value": "application/json" },
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"pedido\": {\n    \"status\": \"pronto\"\n  }\n}"
+          },
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}"]
+          }
+        }
+      },
+      {
+        "name": "DELETE /pedidos/:id",
+        "request": {
+          "method": "DELETE",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}"]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/search (Sem filtros)",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/search",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "search"]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/search (Filtro: email)",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/search?email=alice@example.com",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "search"],
+            "query": [{ "key": "email", "value": "alice@example.com" }]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/search (Filtro: cpf)",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/search?cpf=22222222222",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "search"],
+            "query": [{ "key": "cpf", "value": "22222222222" }]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/search (Filtro: produto)",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/search?produto=piz",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "search"],
+            "query": [{ "key": "produto", "value": "piz" }]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/search (Filtro: cliente nulo)",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/search?cliente_nulo=true",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "search"],
+            "query": [{ "key": "cliente_nulo", "value": "true" }]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/search (Filtro: status)",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/search?status=recebido",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "search"],
+            "query": [{ "key": "status", "value": "recebido" }]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/search (Filtro: pagamento)",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/search?pagamento=em_aberto",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "search"],
+            "query": [{ "key": "pagamento", "value": "em_aberto" }]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/pagamento_confirmado",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/pagamento_confirmado",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "pagamento_confirmado"]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/pagamento_em_aberto",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/pagamento_em_aberto",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "pagamento_em_aberto"]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/pagamento_recusado",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/pagamento_recusado",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "pagamento_recusado"]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/em_preparacao",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/em_preparacao",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "em_preparacao"]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/finalizados",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/finalizados",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "finalizados"]
+          }
+        }
+      },
+      {
+        "name": "PUT /pedidos/:id/pagar",
+        "request": {
+          "method": "PUT",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}/pagar",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}", "pagar"]
+          }
+        }
+      },
+      {
+        "name": "PUT /pedidos/:id/receber",
+        "request": {
+          "method": "PUT",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}/receber",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}", "receber"]
+          }
+        }
+      },
+      {
+        "name": "PUT /pedidos/:id/preparar",
+        "request": {
+          "method": "PUT",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}/preparar",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}", "preparar"]
+          }
+        }
+      },
+      {
+        "name": "PUT /pedidos/:id/pronto",
+        "request": {
+          "method": "PUT",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}/pronto",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}", "pronto"]
+          }
+        }
+      },
+      {
+        "name": "PUT /pedidos/:id/finalizar",
+        "request": {
+          "method": "PUT",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}/finalizar",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}", "finalizar"]
+          }
+        }
+      },
+      {
+        "name": "GET /pedidos/:id/qr-code",
+        "request": {
+          "method": "GET",
+          "header": [
+            { "key": "Accept", "value": "application/json" }
+          ],
+          "url": {
+            "raw": "http://localhost:3030/pedidos/{{pedido_id}}/qr-code",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3030",
+            "path": ["pedidos", "{{pedido_id}}", "qr-code"]
+          }
+        }
+      }
+    ]
+  }
+  
