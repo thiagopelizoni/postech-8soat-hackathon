@@ -27,3 +27,5 @@ gem 'kaminari'
 gem 'rswag'
 gem 'rswag-api'
 gem 'rswag-ui'
+
+gem 'aws-sdk-cognitoidentityprovider'
