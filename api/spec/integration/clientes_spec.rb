@@ -94,4 +94,38 @@ RSpec.describe 'Clientes API', type: :request do
       end
     end
   end
+
+  path '/login' do
+    post 'Autentica um cliente via AWS Cognito' do
+      tags 'Clientes'
+      consumes 'application/json'
+      produces 'application/json'
+
+      parameter name: :credentials, in: :body, schema: {
+        type: :object,
+        properties: {
+          email: { type: :string, format: :email },
+          password: { type: :string }
+        },
+        required: %w[email password]
+      }
+
+      response '200', 'Autenticação bem-sucedida' do
+        let(:cliente) { create(:cliente) }
+        let(:credentials) { { email: cliente.email, password: 'SenhaPadrão!' } }
+
+        run_test!
+      end
+
+      response '401', 'Credenciais inválidas' do
+        let(:credentials) { { email: 'email_inexistente@example.com', password: 'senha_errada' } }
+        run_test!
+      end
+
+      response '404', 'Usuário não encontrado no sistema' do
+        let(:credentials) { { email: 'email_nao_cadastrado@example.com', password: 'SenhaPadrão!' } }
+        run_test!
+      end
+    end
+  end
 end

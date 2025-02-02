@@ -95,6 +95,33 @@ paths:
                 email:
                   type: string
                   format: email
+  "/login":
+    post:
+      summary: Autentica um cliente via AWS Cognito
+      tags:
+      - Clientes
+      parameters: []
+      responses:
+        '200':
+          description: Autenticação bem-sucedida
+        '401':
+          description: Credenciais inválidas
+        '404':
+          description: Usuário não encontrado no sistema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+              - email
+              - password
 components:
   schemas:
     Cliente:

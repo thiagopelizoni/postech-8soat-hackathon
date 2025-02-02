@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   root to: redirect('/api-docs')
 
   resources :clientes, only: %i[index show create update]
+  post 'login', to: 'clientes#login'
 end

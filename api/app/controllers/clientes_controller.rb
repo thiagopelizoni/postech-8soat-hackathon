@@ -27,6 +27,24 @@ class ClientesController < ApplicationController
     end
   end
 
+  def login
+    email = params[:email]
+    password = params[:password]
+
+    token = CognitoAuth.authenticate(email, password)
+
+    if token
+      cliente = Cliente.find_by(email: email)
+      if cliente
+        render json: { cliente: cliente, token: token }, status: :ok
+      else
+        render json: { error: 'Usuário não encontrado no sistema' }, status: :not_found
+      end
+    else
+      render json: { error: 'Credenciais inválidas' }, status: :unauthorized
+    end
+  end
+
   private
 
   def set_cliente
