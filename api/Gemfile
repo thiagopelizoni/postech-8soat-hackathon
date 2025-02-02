@@ -14,8 +14,9 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'faker-cpf'
   gem 'simplecov', require: false
-  gem 'mongoid-rspec'
+  gem 'mongoid-rspec'  
   gem 'newman'
 end
 
