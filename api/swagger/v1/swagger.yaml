@@ -114,13 +114,12 @@ paths:
             schema:
               type: object
               properties:
-                email:
+                cpf:
                   type: string
-                  format: email
                 password:
                   type: string
               required:
-              - email
+              - cpf
               - password
 components:
   schemas:

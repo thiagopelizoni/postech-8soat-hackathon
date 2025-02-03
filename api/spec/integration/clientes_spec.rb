@@ -100,32 +100,33 @@ RSpec.describe 'Clientes API', type: :request do
       tags 'Clientes'
       consumes 'application/json'
       produces 'application/json'
-
+  
       parameter name: :credentials, in: :body, schema: {
         type: :object,
         properties: {
-          email: { type: :string, format: :email },
+          cpf: { type: :string },
           password: { type: :string }
         },
-        required: %w[email password]
+        required: %w[cpf password]
       }
-
+  
       response '200', 'Autenticação bem-sucedida' do
         let(:cliente) { create(:cliente) }
-        let(:credentials) { { email: cliente.email, password: 'SenhaPadrão!' } }
-
+        let(:credentials) { { cpf: cliente.cpf, password: 'SenhaPadrão!' } }
+  
         run_test!
       end
-
+  
       response '401', 'Credenciais inválidas' do
-        let(:credentials) { { email: 'email_inexistente@example.com', password: 'senha_errada' } }
+        let(:credentials) { { cpf: '12345678901', password: 'senha_errada' } }
         run_test!
       end
-
+  
       response '404', 'Usuário não encontrado no sistema' do
-        let(:credentials) { { email: 'email_nao_cadastrado@example.com', password: 'SenhaPadrão!' } }
+        let(:credentials) { { cpf: '00000000000', password: 'SenhaPadrão!' } }
         run_test!
       end
     end
   end
+  
 end

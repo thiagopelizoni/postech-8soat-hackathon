@@ -13,7 +13,14 @@ class CognitoAuth
           'PASSWORD' => password
         }
       )
-      resp.authentication_result['IdToken']
+
+      return nil unless resp.authentication_result
+
+      {
+        id_token: resp.authentication_result.id_token,
+        access_token: resp.authentication_result.access_token,
+        refresh_token: resp.authentication_result.refresh_token
+      }
     rescue Aws::CognitoIdentityProvider::Errors::NotAuthorizedException
       nil
     rescue Aws::CognitoIdentityProvider::Errors::UserNotFoundException
