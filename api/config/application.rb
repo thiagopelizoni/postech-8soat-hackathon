@@ -17,5 +17,12 @@ module Api
 
     config.autoload_lib(ignore: %w(assets tasks))
     config.api_only = true
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :post, :patch, :put, :delete, :options]
+      end
+    end
   end
 end

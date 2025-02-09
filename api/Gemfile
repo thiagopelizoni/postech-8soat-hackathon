@@ -20,6 +20,8 @@ group :development, :test do
   gem 'newman'
 end
 
+gem "rack-cors"
+
 gem 'mongoid'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'kaminari'
