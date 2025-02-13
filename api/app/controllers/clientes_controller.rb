@@ -11,10 +11,21 @@ class ClientesController < ApplicationController
   end
 
   def create
-    cliente = Cliente.new(cliente_params)
+    data = cliente_params.to_h
+    password = data.delete("password")
+    cpf = data["cpf"]
+    
+    cognito_response = CognitoAuth.register(data["email"], password, cpf)
+    if cognito_response.is_a?(Hash) && cognito_response[:error].present?
+      return render json: { error: "Erro ao cadastrar usuário no Cognito: #{cognito_response[:error]}" },
+                    status: :unprocessable_entity
+    end
+
+    cliente = Cliente.new(data)
     if cliente.save
       render json: cliente, status: :created
     else
+      CognitoAuth.delete_user(data["email"])
       render json: { errors: cliente.errors.full_messages }, status: :unprocessable_entity
     end
   end
@@ -60,6 +71,6 @@ class ClientesController < ApplicationController
   end
 
   def cliente_params
-    params.require(:cliente).permit(:nome, :data_nascimento, :cpf, :email)
+    params.require(:cliente).permit(:nome, :data_nascimento, :cpf, :email, :password)
   end
 end

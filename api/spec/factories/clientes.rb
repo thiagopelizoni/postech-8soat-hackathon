@@ -6,5 +6,6 @@ FactoryBot.define do
     data_nascimento { Faker::Date.birthday(min_age: 18, max_age: 90) }
     cpf { Faker::CPF.numeric }
     email { Faker::Internet.email }
+    senha { Faker::Internet.password }
   end
 end

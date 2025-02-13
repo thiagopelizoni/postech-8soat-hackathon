@@ -32,23 +32,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                nome:
-                  type: string
-                data_nascimento:
-                  type: string
-                  format: date
-                cpf:
-                  type: string
-                email:
-                  type: string
-                  format: email
-              required:
-              - nome
-              - data_nascimento
-              - cpf
-              - email
+              "$ref": "#/components/schemas/Cliente"
   "/clientes/{id}":
     get:
       summary: Obtém detalhes de um cliente
@@ -144,8 +128,12 @@ components:
           type: string
           format: email
           description: E-mail do Cliente
+        password:
+          type: string
+          description: Senha do Cliente
       required:
       - nome
       - data_nascimento
       - cpf
       - email
+      - password

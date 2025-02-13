@@ -22,9 +22,10 @@ RSpec.configure do |config|
               nome: { type: :string, description: 'Nome completo do Cliente' },
               data_nascimento: { type: :string, format: :date, description: 'Data de nascimento do Cliente (YYYY-MM-DD)' },
               cpf: { type: :string, description: 'CPF do Cliente (11 dígitos, sem formatação)', example: '12345678901' },
-              email: { type: :string, format: :email, description: 'E-mail do Cliente' }
+              email: { type: :string, format: :email, description: 'E-mail do Cliente' },
+              password: { type: :string, description: 'Senha do Cliente' }
             },
-            required: %w[nome data_nascimento cpf email]
+            required: %w[nome data_nascimento cpf email password]
           }
         }
       }

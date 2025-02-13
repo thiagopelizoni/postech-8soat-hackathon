@@ -20,24 +20,15 @@ RSpec.describe 'Clientes API', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :cliente, in: :body, schema: {
-        type: :object,
-        properties: {
-          nome: { type: :string },
-          data_nascimento: { type: :string, format: :date },
-          cpf: { type: :string },
-          email: { type: :string, format: :email }
-        },
-        required: %w[nome data_nascimento cpf email]
-      }
+      parameter name: :cliente, in: :body, schema: { '$ref' => '#/components/schemas/Cliente' }
 
       response '201', 'Cliente criado com sucesso' do
-        let(:cliente) { attributes_for(:cliente) }
+        let(:cliente) { attributes_for(:cliente).merge(senha: 'SenhaPadrão!') }
         run_test!
       end
 
       response '422', 'Dados inválidos' do
-        let(:cliente) { { nome: '', cpf: '123' } }
+        let(:cliente) { { nome: '', cpf: '123', senha: '' } }
         run_test!
       end
     end
@@ -128,5 +119,4 @@ RSpec.describe 'Clientes API', type: :request do
       end
     end
   end
-  
 end
