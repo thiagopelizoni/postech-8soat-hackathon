@@ -11,17 +11,17 @@ Microsserviço de Clientes.
 
 # Instalação
 
-Caso não exista o arquivo .env previamente configurado, utilize o [.env.example](.env.example) como modelo.
+Caso não exista o arquivo *.env* previamente configurado, utilize o [.env.example](.env.example) como modelo.
 
 ```
 [ ! -f .env ] && cp .env.example .env
 ```
 
-Após ajustar todos os valores presentes no arquivo .env, basta executar o comando abaixo:
+Após ajustar todos os valores presentes no arquivo *.env*, basta executar o comando abaixo:
 
 
 ```
 docker-compose up --build -d
 ```
 
-A aplicação estará disponível em http://localhost:3000/ supondo que o valor RAILS_PORT=3000 no arquivo .env.
+A aplicação estará disponível em http://localhost:3000/ supondo o valor RAILS_PORT=3000 no arquivo *.env*.
