@@ -26,6 +26,15 @@ RSpec.configure do |config|
               password: { type: :string, description: 'Senha do Cliente' }
             },
             required: %w[nome data_nascimento cpf email password]
+          },
+          ClienteInput: {
+            type: :object,
+            properties: {
+              cliente: {
+                '$ref' => '#/components/schemas/Cliente'
+              }
+            },
+            required: ['cliente']
           }
         }
       }

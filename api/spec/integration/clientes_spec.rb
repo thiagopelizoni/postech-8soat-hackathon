@@ -20,15 +20,15 @@ RSpec.describe 'Clientes API', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :cliente, in: :body, schema: { '$ref' => '#/components/schemas/Cliente' }
+      parameter name: :cliente, in: :body, schema: { '$ref' => '#/components/schemas/ClienteInput' }
 
       response '201', 'Cliente criado com sucesso' do
-        let(:cliente) { attributes_for(:cliente).merge(senha: 'SenhaPadrão!') }
+        let(:cliente) { { cliente: attributes_for(:cliente).merge(password: 'SenhaPadrão!') } }
         run_test!
       end
 
       response '422', 'Dados inválidos' do
-        let(:cliente) { { nome: '', cpf: '123', senha: '' } }
+        let(:cliente) { { cliente: { nome: '', cpf: '123', password: '' } } }
         run_test!
       end
     end
@@ -58,29 +58,23 @@ RSpec.describe 'Clientes API', type: :request do
       produces 'application/json'
 
       parameter name: :id, in: :path, type: :string, description: 'ID do Cliente'
-      parameter name: :cliente, in: :body, schema: {
-        type: :object,
-        properties: {
-          nome: { type: :string },
-          email: { type: :string, format: :email }
-        }
-      }
+      parameter name: :cliente, in: :body, schema: { '$ref' => '#/components/schemas/ClienteInput' }
 
       response '200', 'Cliente atualizado com sucesso' do
         let(:id) { create(:cliente).id.to_s }
-        let(:cliente) { { nome: 'Novo Nome' } }
+        let(:cliente) { { cliente: { nome: 'Novo Nome', email: 'novo@example.com', password: 'NovaSenha@2024' } } }
         run_test!
       end
 
       response '404', 'Cliente não encontrado' do
         let(:id) { 'invalido' }
-        let(:cliente) { { nome: 'Novo Nome' } }
+        let(:cliente) { { cliente: { nome: 'Novo Nome', password: 'NovaSenha@2024' } } }
         run_test!
       end
 
       response '422', 'Dados inválidos' do
         let(:id) { create(:cliente).id.to_s }
-        let(:cliente) { { cpf: '123' } }
+        let(:cliente) { { cliente: { cpf: '123' } } }
         run_test!
       end
     end

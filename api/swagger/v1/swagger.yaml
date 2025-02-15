@@ -32,7 +32,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/Cliente"
+              "$ref": "#/components/schemas/ClienteInput"
   "/clientes/{id}":
     get:
       summary: Obtém detalhes de um cliente
@@ -72,13 +72,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                nome:
-                  type: string
-                email:
-                  type: string
-                  format: email
+              "$ref": "#/components/schemas/ClienteInput"
   "/login":
     post:
       summary: Autentica um cliente via AWS Cognito
@@ -137,3 +131,10 @@ components:
       - cpf
       - email
       - password
+    ClienteInput:
+      type: object
+      properties:
+        cliente:
+          "$ref": "#/components/schemas/Cliente"
+      required:
+      - cliente

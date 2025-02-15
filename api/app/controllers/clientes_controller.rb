@@ -14,7 +14,8 @@ class ClientesController < ApplicationController
     data = cliente_params.to_h
     password = data.delete("password")
     cpf = data["cpf"]
-    
+
+    # Registra no Cognito usando CPF como username
     cognito_response = CognitoAuth.register(data["email"], password, cpf)
     if cognito_response.is_a?(Hash) && cognito_response[:error].present?
       return render json: { error: "Erro ao cadastrar usuário no Cognito: #{cognito_response[:error]}" },
@@ -31,7 +32,21 @@ class ClientesController < ApplicationController
   end
 
   def update
-    if @cliente.update(cliente_params)
+    new_email    = cliente_params[:email]
+    new_password = cliente_params[:password]
+
+    # Se houver alteração de email ou senha, atualiza no Cognito
+    if new_email.present? || new_password.present?
+      cognito_response = CognitoAuth.update_user(@cliente.cpf, new_email: new_email, new_password: new_password)
+      if cognito_response.is_a?(Hash) && cognito_response[:error].present?
+        return render json: { error: "Erro ao atualizar usuário no Cognito: #{cognito_response[:error]}" },
+                      status: :unprocessable_entity
+      end
+    end
+
+    local_params = cliente_params.except(:password)
+
+    if @cliente.update(local_params)
       render json: @cliente, status: :ok
     else
       render json: { errors: @cliente.errors.full_messages }, status: :unprocessable_entity
@@ -61,7 +76,7 @@ class ClientesController < ApplicationController
       refresh_token: tokens[:refresh_token] 
     }, status: :ok
   end  
-  
+
   private
 
   def set_cliente
