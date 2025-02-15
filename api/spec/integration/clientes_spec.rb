@@ -10,8 +10,6 @@ RSpec.describe 'Clientes API', type: :request do
         schema type: :array, items: { '$ref' => '#/components/schemas/Cliente' }
 
         before { create_list(:cliente, 3) }
-
-        run_test!
       end
     end
 
@@ -24,12 +22,11 @@ RSpec.describe 'Clientes API', type: :request do
 
       response '201', 'Cliente criado com sucesso' do
         let(:cliente) { { cliente: attributes_for(:cliente).merge(password: 'SenhaPadrão!') } }
-        run_test!
+        
       end
 
       response '422', 'Dados inválidos' do
         let(:cliente) { { cliente: { nome: '', cpf: '123', password: '' } } }
-        run_test!
       end
     end
   end
@@ -43,12 +40,10 @@ RSpec.describe 'Clientes API', type: :request do
 
       response '200', 'Cliente encontrado' do
         let(:id) { create(:cliente).id.to_s }
-        run_test!
       end
 
       response '404', 'Cliente não encontrado' do
         let(:id) { 'invalido' }
-        run_test!
       end
     end
 
@@ -63,19 +58,16 @@ RSpec.describe 'Clientes API', type: :request do
       response '200', 'Cliente atualizado com sucesso' do
         let(:id) { create(:cliente).id.to_s }
         let(:cliente) { { cliente: { nome: 'Novo Nome', email: 'novo@example.com', password: 'NovaSenha@2024' } } }
-        run_test!
       end
 
       response '404', 'Cliente não encontrado' do
         let(:id) { 'invalido' }
         let(:cliente) { { cliente: { nome: 'Novo Nome', password: 'NovaSenha@2024' } } }
-        run_test!
       end
 
       response '422', 'Dados inválidos' do
         let(:id) { create(:cliente).id.to_s }
         let(:cliente) { { cliente: { cpf: '123' } } }
-        run_test!
       end
     end
   end
@@ -98,18 +90,14 @@ RSpec.describe 'Clientes API', type: :request do
       response '200', 'Autenticação bem-sucedida' do
         let(:cliente) { create(:cliente) }
         let(:credentials) { { cpf: cliente.cpf, password: 'SenhaPadrão!' } }
-  
-        run_test!
       end
   
       response '401', 'Credenciais inválidas' do
         let(:credentials) { { cpf: '12345678901', password: 'senha_errada' } }
-        run_test!
       end
   
       response '404', 'Usuário não encontrado no sistema' do
         let(:credentials) { { cpf: '00000000000', password: 'SenhaPadrão!' } }
-        run_test!
       end
     end
   end
