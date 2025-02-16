@@ -8,6 +8,7 @@ services:
       - "${RAILS_PORT}:3000"
     volumes:
       - ./api:/api
+      - coverage_data:/api/coverage
     env_file:
       - .env
     depends_on:
@@ -23,5 +24,38 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
 
+  test-runner:
+    build:
+      context: .
+    command: bash -c "bundle exec rspec && bundle exec cucumber"
+    volumes:
+      - ./api:/api
+      - coverage_data:/api/coverage
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  sonar:
+    image: sonarsource/sonar-scanner-cli:latest
+    volumes:
+      - ./api:/api
+      - coverage_data:/api/coverage
+    env_file:
+      - .env
+    depends_on:
+      - api
+    command: >
+      sonar-scanner 
+      -Dsonar.projectKey=my_project 
+      -Dsonar.organization=my_org 
+      -Dsonar.host.url=https://sonarcloud.io 
+      -Dsonar.sources=app 
+      -Dsonar.tests=spec,features 
+      -Dsonar.exclusions=spec/**,features/** 
+      -Dsonar.coverage.exclusions="spec/**,features/**"
+      -Dsonar.ruby.coverage.reportPaths=/api/coverage/coverage.xml
+
 volumes:
   mongodb_data:
+  coverage_data:

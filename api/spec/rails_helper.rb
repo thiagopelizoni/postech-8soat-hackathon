@@ -5,6 +5,8 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 require 'mongoid-rspec'
 require 'shoulda/matchers'
+require 'simplecov'
+require 'simplecov-cobertura'
 
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
@@ -19,4 +21,10 @@ Shoulda::Matchers.configure do |config|
     with.test_framework :rspec
     with.library :active_model
   end
+end
+
+SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+SimpleCov.start do
+  add_filter '/spec/'
+  add_filter '/features/'
 end
