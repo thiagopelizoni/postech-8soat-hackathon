@@ -17,7 +17,10 @@ group :development, :test do
   gem 'cpf_faker'
   gem 'simplecov', require: false
   gem 'mongoid-rspec'  
-  gem 'newman'
+  gem 'newman'  
+  gem 'webmock', '~> 3.18', '>= 3.18.1'
+  gem 'rspec-rails', require: false
+  gem 'cucumber-rails', '~> 3.1', '>= 3.1.1', require: false
 end
 
 gem "rack-cors"
@@ -31,3 +34,5 @@ gem 'rswag-api'
 gem 'rswag-ui'
 
 gem 'aws-sdk-cognitoidentityprovider'
+
+gem 'httparty'
