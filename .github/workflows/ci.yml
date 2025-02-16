@@ -17,16 +17,44 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "RAILS_ENV=${{ secrets.RAILS_ENV }}" >> .env
+          echo "RAILS_MAX_THREADS=${{ secrets.RAILS_MAX_THREADS }}" >> .env
+          echo "RAILS_PORT=${{ secrets.RAILS_PORT }}" >> .env
+          echo "MONGO_USERNAME=${{ secrets.MONGO_USERNAME }}" >> .env
+          echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
+          echo "MONGO_PORT=${{ secrets.MONGO_PORT }}" >> .env
+          echo "COGNITO_USER_POOL_CLIENT_ID=${{ secrets.COGNITO_USER_POOL_CLIENT_ID }}" >> .env
+          echo "COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}" >> .env
+          echo "COGNITO_PASSWORD=${{ secrets.COGNITO_PASSWORD }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env
+
+      - name: Ensure .env exists
+        run: ls -la .env && cat .env
+
+      - name: Set up Docker services
         run: |
           docker compose up -d db
-          sleep 10 # Aguarda inicialização do banco
+          sleep 10  # Aguarda inicialização do banco
 
       - name: Run RSpec and Cucumber
-        run: docker compose run --rm test-runner
+        run: docker compose up --abort-on-container-exit --exit-code-from test-runner test-runner
 
       - name: Persist coverage data
-        run: docker compose cp test-runner:/api/coverage ./coverage
+        run: |
+          # Captura o ID do container test-runner mesmo que ele esteja parado
+          container_id=$(docker ps -a -q -f "name=test-runner")
+          if [ -z "$container_id" ]; then
+            echo "Container test-runner not found."
+            exit 1
+          else
+            echo "Found container: $container_id"
+            docker cp $container_id:/api/coverage ./coverage
+          fi
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
