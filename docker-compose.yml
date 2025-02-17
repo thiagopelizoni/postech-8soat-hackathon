@@ -39,22 +39,20 @@ services:
   sonar:
     image: sonarsource/sonar-scanner-cli:latest
     volumes:
-      - ./api:/api
-      - coverage_data:/api/coverage
-    env_file:
-      - .env
+      - ./api:/usr/src
+      - coverage_data:/usr/src/coverage
     depends_on:
       - api
     command: >
-      sonar-scanner 
-      -Dsonar.projectKey=my_project 
-      -Dsonar.organization=my_org 
-      -Dsonar.host.url=https://sonarcloud.io 
-      -Dsonar.sources=app 
-      -Dsonar.tests=spec,features 
-      -Dsonar.exclusions=spec/**,features/** 
-      -Dsonar.coverage.exclusions="spec/**,features/**"
-      -Dsonar.ruby.coverage.reportPaths=/api/coverage/coverage.xml
+      sonar-scanner
+      -Dsonar.projectKey=thiagopelizoni_postech-8soat-cliente
+      -Dsonar.organization=thiagopelizoni
+      -Dsonar.host.url=https://sonarcloud.io
+      -Dsonar.sources=/usr/src/app
+      -Dsonar.tests=/usr/src/spec,/usr/src/features
+      -Dsonar.exclusions=/usr/src/spec/**,/usr/src/features/**
+      -Dsonar.coverage.exclusions="/usr/src/spec/**,/usr/src/features/**"
+      -Dsonar.ruby.coverage.reportPaths=/usr/src/coverage/coverage.xml
 
 volumes:
   mongodb_data:

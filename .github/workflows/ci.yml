@@ -66,18 +66,23 @@ jobs:
     name: Run SonarQube Analysis
     runs-on: ubuntu-latest
     needs: test
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download coverage report
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage
-
-      - name: Run SonarQube Scanner
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: docker compose run --rm sonar
+      - name: Create minimal .env file for sonar
+        run: |
+          touch .env
+          echo "RAILS_ENV=${{ secrets.RAILS_ENV }}" >> .env
+          echo "RAILS_MAX_THREADS=${{ secrets.RAILS_MAX_THREADS }}" >> .env
+          echo "RAILS_PORT=${{ secrets.RAILS_PORT }}" >> .env
+          echo "MONGO_USERNAME=${{ secrets.MONGO_USERNAME }}" >> .env
+          echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
+          echo "MONGO_PORT=${{ secrets.MONGO_PORT }}" >> .env
+          echo "COGNITO_USER_POOL_CLIENT_ID=${{ secrets.COGNITO_USER_POOL_CLIENT_ID }}" >> .env
+          echo "COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}" >> .env
+          echo "COGNITO_PASSWORD=${{ secrets.COGNITO_PASSWORD }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env
+          echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}" >> .env
