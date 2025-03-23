@@ -1,23 +1,20 @@
 require 'aws-sdk-cognitoidentityprovider'
 
 class CognitoAuth
-  def self.register(email, password, cpf)
+  def self.register(email, password)
     client = Aws::CognitoIdentityProvider::Client.new(region: ENV['AWS_REGION'])
-    # Cria o usuário de forma administrativa, sem envio de e-mail de confirmação
     client.admin_create_user(
       user_pool_id: ENV['COGNITO_USER_POOL_ID'],
-      username: cpf,  # Usa o CPF como identificador principal
+      username: email,
       user_attributes: [
         { name: 'email', value: email },
-        { name: 'email_verified', value: 'true' }, # Marca o e-mail como verificado
-        { name: 'custom:cpf', value: cpf }
+        { name: 'email_verified', value: 'true' }
       ],
-      message_action: 'SUPPRESS'  # Não envia o e-mail de verificação
+      message_action: 'SUPPRESS'
     )
-    # Define a senha como permanente, confirmando-a imediatamente
     client.admin_set_user_password(
       user_pool_id: ENV['COGNITO_USER_POOL_ID'],
-      username: cpf,
+      username: email,
       password: password,
       permanent: true
     )
@@ -33,7 +30,7 @@ class CognitoAuth
         client_id: ENV['COGNITO_USER_POOL_CLIENT_ID'],
         auth_flow: 'USER_PASSWORD_AUTH',
         auth_parameters: {
-          'USERNAME' => email,  # Apesar de o username ser o CPF, o pool permite login via alias (email)
+          'USERNAME' => email,
           'PASSWORD' => password
         }
       )
@@ -50,26 +47,26 @@ class CognitoAuth
     end
   end
 
-  def self.delete_user(cpf)
+  def self.delete_user(email)
     client = Aws::CognitoIdentityProvider::Client.new(region: ENV['AWS_REGION'])
     client.admin_delete_user(
       user_pool_id: ENV['COGNITO_USER_POOL_ID'],
-      username: cpf  # Usa o CPF, que é o username
+      username: email
     )
   rescue Aws::CognitoIdentityProvider::Errors::ServiceError => e
     Rails.logger.error "Erro ao deletar usuário no Cognito: #{e.message}"
   end
 
-  def self.update_user(cpf, new_email: nil, new_password: nil)
+  def self.update_user(email, new_email: nil, new_password: nil)
     client = Aws::CognitoIdentityProvider::Client.new(region: ENV['AWS_REGION'])
 
     if new_email.present?
       client.admin_update_user_attributes(
         user_pool_id: ENV['COGNITO_USER_POOL_ID'],
-        username: cpf,
+        username: email,
         user_attributes: [
           { name: 'email', value: new_email },
-          { name: 'email_verified', value: 'true' } # Garante que o novo e-mail esteja verificado
+          { name: 'email_verified', value: 'true' }
         ]
       )
     end
@@ -77,7 +74,7 @@ class CognitoAuth
     if new_password.present?
       client.admin_set_user_password(
         user_pool_id: ENV['COGNITO_USER_POOL_ID'],
-        username: cpf,
+        username: email,
         password: new_password,
         permanent: true
       )

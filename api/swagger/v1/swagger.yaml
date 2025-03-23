@@ -92,32 +92,21 @@ paths:
             schema:
               type: object
               properties:
-                cpf:
+                email:
                   type: string
                 password:
                   type: string
               required:
-              - cpf
+              - email
               - password
 components:
   schemas:
     Cliente:
       type: object
       properties:
-        id:
-          type: string
-          description: ID do Cliente
         nome:
           type: string
           description: Nome completo do Cliente
-        data_nascimento:
-          type: string
-          format: date
-          description: Data de nascimento do Cliente (YYYY-MM-DD)
-        cpf:
-          type: string
-          description: CPF do Cliente (11 dígitos, sem formatação)
-          example: '12345678901'
         email:
           type: string
           format: email

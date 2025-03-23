@@ -14,35 +14,19 @@ RSpec.describe Cliente, type: :model do
       expect(subject.errors[:nome]).to include("can't be blank")
     end
 
-    it "não é válido sem data_nascimento" do
-      subject.data_nascimento = nil
-      expect(subject).not_to be_valid
-      expect(subject.errors[:data_nascimento]).to include("can't be blank")
-    end
-
-    it "não é válido sem cpf" do
-      subject.cpf = nil
-      expect(subject).not_to be_valid
-      expect(subject.errors[:cpf]).to include("can't be blank")
-    end
-
     it "não é válido sem email" do
       subject.email = nil
       expect(subject).not_to be_valid
       expect(subject.errors[:email]).to include("can't be blank")
     end
 
-    it "não é válido com um CPF inválido (todos dígitos iguais)" do
-      subject.cpf = "11111111111"
-      expect(subject).not_to be_valid
-      expect(subject.errors[:cpf]).to include("inválido")
-    end
-
-    it "não é válido com um CPF com dígitos incorretos" do
-      cpf_invalido = subject.cpf[0..9] + ((subject.cpf[-1].to_i + 1) % 10).to_s
-      subject.cpf = cpf_invalido
-      expect(subject).not_to be_valid
-      expect(subject.errors[:cpf]).to include("inválido")
+    it "não é válido com um email inválido" do
+      emails_invalidos = ["usuario", "usuario@", "usuario@com", "@dominio.com", "usuario@.com", "usuario@dominio,com"]
+      emails_invalidos.each do |email_invalido|
+        subject.email = email_invalido
+        expect(subject).not_to be_valid
+        expect(subject.errors[:email]).to include("is invalid")
+      end
     end
   end
 end

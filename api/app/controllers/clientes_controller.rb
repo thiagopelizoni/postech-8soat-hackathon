@@ -13,10 +13,8 @@ class ClientesController < ApplicationController
   def create
     data = cliente_params.to_h
     password = data.delete("password")
-    cpf = data["cpf"]
 
-    # Registra no Cognito usando CPF como username
-    cognito_response = CognitoAuth.register(data["email"], password, cpf)
+    cognito_response = CognitoAuth.register(data["email"], password)
     if cognito_response.is_a?(Hash) && cognito_response[:error].present?
       return render json: { error: "Erro ao cadastrar usuário no Cognito: #{cognito_response[:error]}" },
                     status: :unprocessable_entity
@@ -35,9 +33,8 @@ class ClientesController < ApplicationController
     new_email    = cliente_params[:email]
     new_password = cliente_params[:password]
 
-    # Se houver alteração de email ou senha, atualiza no Cognito
     if new_email.present? || new_password.present?
-      cognito_response = CognitoAuth.update_user(@cliente.cpf, new_email: new_email, new_password: new_password)
+      cognito_response = CognitoAuth.update_user(@cliente.email, new_email: new_email, new_password: new_password)
       if cognito_response.is_a?(Hash) && cognito_response[:error].present?
         return render json: { error: "Erro ao atualizar usuário no Cognito: #{cognito_response[:error]}" },
                       status: :unprocessable_entity
@@ -54,13 +51,13 @@ class ClientesController < ApplicationController
   end
 
   def login
-    cpf = params[:cpf]
+    email = params[:email]
     password = params[:password]
   
-    cliente = Cliente.find_by(cpf: cpf)
+    cliente = Cliente.find_by(email: email)
   
     unless cliente
-      return render json: { error: 'Cliente não encontrado no sistema pelo CPF informado' }, status: :not_found
+      return render json: { error: 'Cliente não encontrado no sistema pelo email informado' }, status: :not_found
     end
   
     tokens = CognitoAuth.authenticate(cliente.email, password)
@@ -69,8 +66,7 @@ class ClientesController < ApplicationController
       return render json: { error: 'Credenciais inválidas' }, status: :unauthorized
     end
   
-    render json: { 
-      cliente: cliente, 
+    render json: {  
       token: tokens[:id_token], 
       access_token: tokens[:access_token], 
       refresh_token: tokens[:refresh_token] 
@@ -86,6 +82,6 @@ class ClientesController < ApplicationController
   end
 
   def cliente_params
-    params.require(:cliente).permit(:nome, :data_nascimento, :cpf, :email, :password)
+    params.require(:cliente).permit(:nome, :email, :password)
   end
 end

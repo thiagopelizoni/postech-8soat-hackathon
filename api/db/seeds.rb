@@ -13,23 +13,19 @@ cognito_client = Aws::CognitoIdentityProvider::Client.new(region: AWS_REGION, cr
 
 clientes = []
 
-200.times do |i|
+50.times do |i|
   nome = Faker::Name.name
-  data_nascimento = Faker::Date.birthday(min_age: 18, max_age: 90).strftime('%Y-%m-%d')
-  cpf = Faker::CPF.numeric
   email = Faker::Internet.email
   password = ENV.fetch('COGNITO_PASSWORD')
 
   begin
     cognito_client.admin_create_user(
       user_pool_id: USER_POOL_ID,
-      username: cpf,
+      username: email,
       user_attributes: [
         { name: 'email', value: email },
         { name: 'email_verified', value: 'true' },
-        { name: 'name', value: nome },
-        { name: 'custom:cpf', value: cpf },
-        { name: 'custom:data_nascimento', value: data_nascimento }
+        { name: 'name', value: nome }
       ],
       temporary_password: password,
       message_action: 'SUPPRESS'
@@ -37,12 +33,12 @@ clientes = []
 
     cognito_client.admin_set_user_password(
       user_pool_id: USER_POOL_ID,
-      username: cpf,
+      username: email,
       password: password,
       permanent: true
     )
   rescue Aws::CognitoIdentityProvider::Errors::UsernameExistsException
-    puts "Usuário já existe no Cognito: CPF #{cpf}"
+    puts "Usuário já existe no Cognito: Email #{email}"
   rescue Aws::CognitoIdentityProvider::Errors::LimitExceededException
     sleep 2
     retry
@@ -50,8 +46,6 @@ clientes = []
 
   clientes << {
     nome: nome,
-    data_nascimento: data_nascimento,
-    cpf: cpf,
     email: email
   }
 
