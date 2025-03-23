@@ -13,7 +13,7 @@ cognito_client = Aws::CognitoIdentityProvider::Client.new(region: AWS_REGION, cr
 
 clientes = []
 
-50.times do |i|
+10.times do |i|
   nome = Faker::Name.name
   email = Faker::Internet.email
   password = ENV.fetch('COGNITO_PASSWORD')
