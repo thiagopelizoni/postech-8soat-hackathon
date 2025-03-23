@@ -6,21 +6,7 @@ resource "aws_cognito_user_pool" "user_pool" {
   name = "SandboxUserPool"
 
   schema {
-    name                = "cpf"
-    attribute_data_type = "String"
-    required            = false
-    mutable             = true
-  }
-
-  schema {
     name                = "nome"
-    attribute_data_type = "String"
-    required            = false
-    mutable             = true
-  }
-
-  schema {
-    name                = "data_nascimento"
     attribute_data_type = "String"
     required            = false
     mutable             = true
