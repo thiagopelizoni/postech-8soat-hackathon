@@ -39,3 +39,5 @@ gem 'rswag-ui'
 gem 'aws-sdk-cognitoidentityprovider'
 
 gem 'httparty'
+
+gem 'streamio-ffmpeg', '~> 3.0', '>= 3.0.2'
