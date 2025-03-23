@@ -1,8 +1,8 @@
-# Pos Tech FIAP | Software Arquitecture | 8SOAT | Clientes
+# Pos Tech FIAP | Software Arquitecture | 8SOAT | Hackathon
 
-Tech Challenge do curso de [Pós-Graduação em Arquitetura de Software da FIAP](https://postech.fiap.com.br/curso/software-architecture/).
+Hackathon do curso de [Pós-Graduação em Arquitetura de Software da FIAP](https://postech.fiap.com.br/curso/software-architecture/).
 
-Microsserviço de Clientes.
+Entrega da Fase 5 do Tech Challenge.
 
 # Requisitos
 
@@ -24,4 +24,4 @@ Após ajustar todos os valores presentes no arquivo *.env*, basta executar o com
 docker-compose up --build -d
 ```
 
-A aplicação estará disponível em http://localhost:3000/ supondo o valor RAILS_PORT=3000 no arquivo *.env*.
+A aplicação estará disponível em http://localhost:3000/ dado que o valor RAILS_PORT=3000 no arquivo *.env*.
