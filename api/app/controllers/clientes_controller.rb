@@ -51,8 +51,15 @@ class ClientesController < ApplicationController
   end
 
   def login
-    email = params[:email]
-    password = params[:password]
+    begin
+      payload = JSON.parse(request.body.read)
+      email = payload["email"]
+      password = payload["password"]
+    rescue JSON::ParserError
+      return render json: { error: 'Erro ao processar JSON' }, status: :bad_request
+    end
+  
+    return render json: { error: 'Email e senha são obrigatórios' }, status: :bad_request if email.blank? || password.blank?
   
     cliente = Cliente.find_by(email: email)
   
@@ -66,12 +73,15 @@ class ClientesController < ApplicationController
       return render json: { error: 'Credenciais inválidas' }, status: :unauthorized
     end
   
-    render json: {  
-      token: tokens[:id_token], 
-      access_token: tokens[:access_token], 
-      refresh_token: tokens[:refresh_token] 
-    }, status: :ok
-  end  
+    cliente.update(
+      token: tokens[:id_token],
+      access_token: tokens[:access_token],
+      refresh_token: tokens[:refresh_token]
+    )
+  
+    render json: cliente, status: :ok
+  end
+ 
 
   private
 
