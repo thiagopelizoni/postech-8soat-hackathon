@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.1
 info:
-  title: API Clientes
+  title: Hackathon
   version: v1
 paths:
   "/clientes":
@@ -116,8 +116,6 @@ components:
           description: Senha do Cliente
       required:
       - nome
-      - data_nascimento
-      - cpf
       - email
       - password
     ClienteInput:

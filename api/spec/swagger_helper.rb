@@ -9,7 +9,7 @@ RSpec.configure do |config|
     'v1/swagger.yaml' => {
       openapi: '3.0.1',
       info: {
-        title: 'API Clientes',
+        title: 'Hackathon',
         version: 'v1'
       },
       paths: {},
@@ -22,7 +22,7 @@ RSpec.configure do |config|
               email: { type: :string, format: :email, description: 'E-mail do Cliente' },
               password: { type: :string, description: 'Senha do Cliente' }
             },
-            required: %w[nome data_nascimento cpf email password]
+            required: %w[nome email password]
           },
           ClienteInput: {
             type: :object,
