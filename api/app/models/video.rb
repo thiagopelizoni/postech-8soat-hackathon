@@ -12,19 +12,19 @@ class Video
   validates :local_path, presence: true
   validates :status, inclusion: { in: %w[recebido armazenado processado finalizado] }
 
-  def self.recebido
+  def self.recebidos
     where(status: 'recebido')
   end
 
-  def self.armazenado
+  def self.armazenados
     where(status: 'armazenado')
   end
 
-  def self.processado
+  def self.processados
     where(status: 'processado')
   end
 
-  def self.finalizado
+  def self.finalizados
     where(status: 'finalizado')
   end
 end
