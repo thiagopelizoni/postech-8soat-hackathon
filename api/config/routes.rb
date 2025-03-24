@@ -6,4 +6,6 @@ Rails.application.routes.draw do
 
   resources :clientes, only: %i[index show create update]
   post 'login', to: 'clientes#login'
+
+  resources :videos, only: %i[index show create update destroy]
 end
