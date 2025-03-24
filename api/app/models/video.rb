@@ -9,7 +9,6 @@ class Video
 
   belongs_to :cliente
 
-  validates :local_path, presence: true
   validates :status, inclusion: { in: %w[recebido armazenado processado finalizado] }
 
   def self.recebidos
