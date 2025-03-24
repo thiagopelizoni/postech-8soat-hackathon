@@ -9,7 +9,14 @@ RUN apt-get update -qq && apt-get install -y \
   build-essential \
   libpq-dev \
   curl \
-  gnupg2
+  gnupg2 \
+  ffmpeg \
+  libavcodec-dev \
+  libavformat-dev \
+  libavdevice-dev \
+  libavfilter-dev \
+  libswscale-dev \
+  libswresample-dev
 
 RUN curl -sL https://deb.nodesource.com/setup_$NODE_VERSION | bash - && apt-get install -y nodejs
 

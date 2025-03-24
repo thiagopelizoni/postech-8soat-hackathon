@@ -47,6 +47,17 @@ class CognitoAuth
     end
   end
 
+  def self.valid_token?(access_token)
+    client = Aws::CognitoIdentityProvider::Client.new(region: ENV['AWS_REGION'])
+    begin
+      client.get_user(access_token: access_token)
+      true
+    rescue Aws::CognitoIdentityProvider::Errors::NotAuthorizedException,
+           Aws::CognitoIdentityProvider::Errors::UserNotFoundException
+      false
+    end
+  end
+
   def self.delete_user(email)
     client = Aws::CognitoIdentityProvider::Client.new(region: ENV['AWS_REGION'])
     client.admin_delete_user(
