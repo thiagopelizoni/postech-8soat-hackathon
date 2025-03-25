@@ -123,6 +123,12 @@ paths:
         description: Token de autenticação
         schema:
           type: string
+      description: |
+        Exemplo de cURL para envio do vídeo: \
+        curl -X POST "http://localhost:3000/videos" \
+          -H "Authorization: Bearer SEU_TOKEN_AQUI" \
+          -H "Content-Type: multipart/form-data" \
+          -F "arquivo=@/caminho/para/seu/video.mp4"
       responses:
         '201':
           description: Vídeo criado com sucesso

@@ -21,25 +21,28 @@ RSpec.describe 'Videos API', swagger_doc: 'v1/swagger.yaml', type: :request do
       parameter name: :arquivo, in: :formData, type: :file, description: 'Arquivo de vídeo a ser enviado'
 
       response '201', 'Vídeo criado com sucesso' do
-        let(:Authorization) { "Bearer #{create(:cliente).access_token}" }
+        description <<~DESC
+          Exemplo de cURL para envio do vídeo: \\
+          curl -X POST "http://localhost:3000/videos" \\
+            -H "Authorization: Bearer SEU_TOKEN_AQUI" \\
+            -H "Content-Type: multipart/form-data" \\
+            -F "arquivo=@/caminho/para/seu/video.mp4"
+        DESC
         let(:arquivo) { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'files', 'video.mp4'), 'video/mp4') }
         run_test!
       end
 
       response '400', 'Arquivo de vídeo é obrigatório' do
-        let(:Authorization) { "Bearer #{create(:cliente).access_token}" }
         let(:arquivo) { nil }
         run_test!
       end
 
       response '401', 'Não autorizado' do
-        let(:Authorization) { 'Bearer token_invalido' }
         let(:arquivo) { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'files', 'video.mp4'), 'video/mp4') }
         run_test!
       end
 
       response '422', 'Dados inválidos' do
-        let(:Authorization) { "Bearer #{create(:cliente).access_token}" }
         let(:arquivo) { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'files', 'video_invalido.mp4'), 'video/mp4') }
         run_test!
       end
@@ -50,7 +53,6 @@ RSpec.describe 'Videos API', swagger_doc: 'v1/swagger.yaml', type: :request do
     get 'Obtém detalhes de um vídeo' do
       tags 'Videos'
       produces 'application/json'
-
       parameter name: :id, in: :path, type: :string, description: 'ID do Vídeo'
 
       response '200', 'Vídeo encontrado' do
@@ -68,7 +70,6 @@ RSpec.describe 'Videos API', swagger_doc: 'v1/swagger.yaml', type: :request do
       tags 'Videos'
       consumes 'application/json'
       produces 'application/json'
-
       parameter name: :id, in: :path, type: :string, description: 'ID do Vídeo'
       parameter name: :video, in: :body, schema: { '$ref' => '#/components/schemas/VideoInput' }
 
@@ -94,7 +95,6 @@ RSpec.describe 'Videos API', swagger_doc: 'v1/swagger.yaml', type: :request do
     delete 'Remove um vídeo' do
       tags 'Videos'
       produces 'application/json'
-
       parameter name: :id, in: :path, type: :string, description: 'ID do Vídeo'
 
       response '204', 'Vídeo removido com sucesso' do
