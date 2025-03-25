@@ -2,7 +2,7 @@ require 'aws-sdk-s3'
 
 namespace :videos do
   desc "Upload received videos to S3 and update their status"
-  task upload_to_s3: :environment do
+  task upload: :environment do
     s3_client = Aws::S3::Client.new(
       access_key_id: ENV['AWS_ACCESS_KEY_ID'],
       secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
