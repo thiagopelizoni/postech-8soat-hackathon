@@ -1,7 +1,7 @@
 ---
 openapi: 3.0.1
 info:
-  title: Hackathon
+  title: Hackathon API
   version: v1
 paths:
   "/clientes":
@@ -99,6 +99,101 @@ paths:
               required:
               - email
               - password
+  "/videos":
+    get:
+      summary: Lista todos os vídeos
+      tags:
+      - Videos
+      responses:
+        '200':
+          description: Lista de vídeos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Video"
+    post:
+      summary: Cria um novo vídeo
+      tags:
+      - Videos
+      parameters:
+      - name: Authorization
+        in: header
+        description: Token de autenticação
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Vídeo criado com sucesso
+        '400':
+          description: Arquivo de vídeo é obrigatório
+        '401':
+          description: Não autorizado
+        '422':
+          description: Dados inválidos
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: file
+        description: Arquivo de vídeo a ser enviado
+  "/videos/{id}":
+    get:
+      summary: Obtém detalhes de um vídeo
+      tags:
+      - Videos
+      parameters:
+      - name: id
+        in: path
+        description: ID do Vídeo
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Vídeo encontrado
+        '404':
+          description: Vídeo não encontrado
+    patch:
+      summary: Atualiza um vídeo
+      tags:
+      - Videos
+      parameters:
+      - name: id
+        in: path
+        description: ID do Vídeo
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Vídeo atualizado com sucesso
+        '404':
+          description: Vídeo não encontrado
+        '422':
+          description: Dados inválidos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VideoInput"
+    delete:
+      summary: Remove um vídeo
+      tags:
+      - Videos
+      parameters:
+      - name: id
+        in: path
+        description: ID do Vídeo
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Vídeo removido com sucesso
+        '404':
+          description: Vídeo não encontrado
 components:
   schemas:
     Cliente:
@@ -125,3 +220,54 @@ components:
           "$ref": "#/components/schemas/Cliente"
       required:
       - cliente
+    Video:
+      type: object
+      properties:
+        local_path:
+          type: string
+          description: Caminho local do vídeo
+        remote_path:
+          type: string
+          description: Caminho remoto do vídeo
+        status:
+          type: string
+          description: Status do vídeo
+          enum:
+          - recebido
+          - armazenado
+          - processado
+          - finalizado
+        metadados:
+          type: object
+          description: Metadados do vídeo
+          properties:
+            duration:
+              type: number
+              description: Duração do vídeo
+            bitrate:
+              type: number
+              description: Taxa de bits do vídeo
+            resolution:
+              type: string
+              description: Resolução do vídeo
+            video_stream:
+              type: string
+              description: Stream de vídeo
+            audio_stream:
+              type: string
+              description: Stream de áudio
+        cliente_id:
+          type: string
+          description: ID do cliente associado
+      required:
+      - local_path
+      - status
+      - metadados
+      - cliente_id
+    VideoInput:
+      type: object
+      properties:
+        video:
+          "$ref": "#/components/schemas/Video"
+      required:
+      - video

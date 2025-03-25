@@ -9,7 +9,7 @@ RSpec.configure do |config|
     'v1/swagger.yaml' => {
       openapi: '3.0.1',
       info: {
-        title: 'Hackathon',
+        title: 'Hackathon API',
         version: 'v1'
       },
       paths: {},
@@ -32,6 +32,36 @@ RSpec.configure do |config|
               }
             },
             required: ['cliente']
+          },
+          Video: {
+            type: :object,
+            properties: {
+              local_path: { type: :string, description: 'Caminho local do vídeo' },
+              remote_path: { type: :string, description: 'Caminho remoto do vídeo' },
+              status: { type: :string, description: 'Status do vídeo', enum: %w[recebido armazenado processado finalizado] },
+              metadados: {
+                type: :object,
+                description: 'Metadados do vídeo',
+                properties: {
+                  duration: { type: :number, description: 'Duração do vídeo' },
+                  bitrate: { type: :number, description: 'Taxa de bits do vídeo' },
+                  resolution: { type: :string, description: 'Resolução do vídeo' },
+                  video_stream: { type: :string, description: 'Stream de vídeo' },
+                  audio_stream: { type: :string, description: 'Stream de áudio' }
+                }
+              },
+              cliente_id: { type: :string, description: 'ID do cliente associado' }
+            },
+            required: %w[local_path status metadados cliente_id]
+          },
+          VideoInput: {
+            type: :object,
+            properties: {
+              video: {
+                '$ref' => '#/components/schemas/Video'
+              }
+            },
+            required: ['video']
           }
         }
       }
