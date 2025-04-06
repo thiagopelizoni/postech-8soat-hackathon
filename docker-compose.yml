@@ -1,8 +1,13 @@
+version: "3.9"
+
 services:
   api:
     build:
       context: .
-    command: bash -c "ruby lib/db_setup.rb && rm -f tmp/pids/server.pid && rails server -b '0.0.0.0'"
+    command: >
+      bash -c "ruby lib/db_setup.rb &&
+      rm -f tmp/pids/server.pid &&
+      rails server -b '0.0.0.0'"
     restart: always
     ports:
       - "${RAILS_PORT}:3000"
@@ -12,7 +17,8 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: mongo:latest
@@ -23,18 +29,28 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   test-runner:
     build:
       context: .
-    command: bash -c "bundle exec rspec && bundle exec cucumber"
+    command: >
+      bash -c "bundle exec rspec &&
+      bundle exec cucumber"
     volumes:
       - ./api:/api
       - coverage_data:/api/coverage
     env_file:
       - .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    profiles:
+      - test
 
   sonar:
     image: sonarsource/sonar-scanner-cli:latest
@@ -42,7 +58,8 @@ services:
       - ./api:/usr/src
       - coverage_data:/usr/src/coverage
     depends_on:
-      - api
+      api:
+        condition: service_started
     command: >
       sonar-scanner
       -Dsonar.projectKey=thiagopelizoni_postech-8soat-cliente
@@ -53,6 +70,8 @@ services:
       -Dsonar.exclusions=/usr/src/spec/**,/usr/src/features/**
       -Dsonar.coverage.exclusions="/usr/src/spec/**,/usr/src/features/**"
       -Dsonar.ruby.coverage.reportPaths=/usr/src/coverage/coverage.xml
+    profiles:
+      - sonar
 
 volumes:
   mongodb_data:

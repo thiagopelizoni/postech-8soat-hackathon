@@ -54,4 +54,4 @@ end
 
 Cliente.create!(clientes)
 
-puts "200 Clientes gerados e cadastrados no Cognito sem envio de e-mail!"
+puts "Clientes gerados e cadastrados no Cognito sem envio de e-mail!"
