@@ -1,12 +1,11 @@
 require 'aws-sdk-s3'
-require 'streamio-ffmpeg'
 require 'zip'
 require 'logger'
 
 class VideoProcessor
   def initialize(video)
     @video = video
-    @logger = Logger.new(STDOUT) # Log para saída padrão
+    @logger = Logger.new(STDOUT)
     @s3_client = Aws::S3::Client.new(
       access_key_id: ENV['AWS_ACCESS_KEY_ID'],
       secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
@@ -52,7 +51,7 @@ class VideoProcessor
     
     @logger.info("Iniciando extração de frames para: #{output_path}")
     
-    # Usar o comando FFmpeg diretamente
+    # Usando o comando FFmpeg diretamente devido a incompatibilidades com a gem 'streamio-ffmpeg'
     command = [
       "ffmpeg", 
       "-i", @local_video_path, 
@@ -73,7 +72,6 @@ class VideoProcessor
       raise "Falha na extração de frames. Saída do comando: #{output}"
     end
     
-    # Verifica se os frames foram gerados
     frames = Dir.glob(File.join(@frames_dir, '*.jpg'))
     if frames.empty?
       @logger.error("Nenhum frame foi gerado em #{@frames_dir}")
