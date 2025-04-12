@@ -1,25 +1,27 @@
 namespace :video do
-  desc "Upload received videos to S3 and update their status"
+  desc "Carregar vídeos recebidos para o S3 e atualizar seus status"
   task upload: :environment do
+    logger = Logger.new(STDOUT)
     Video.recebidos.each do |video|
       begin
         VideoUpload.new(video).call
-        puts "Uploaded #{video.local_path} to S3, updated video status to 'armazenado', and removed local file."
+        logger.info("Vídeo #{video.local_path} carregado para o S3, status atualizado para 'armazenado' e arquivo local removido.")
       rescue => e
-        puts "Failed to upload #{video.local_path} to S3: #{e.message}"
+        logger.error("Falha ao carregar #{video.local_path} para o S3: #{e.message}")
       end
     end
   end
 
-  desc "Process stored videos by extracting frames and uploading a ZIP of images"
+  desc "Processar vídeos armazenados extraindo frames e carregando um ZIP de imagens"
   task process: :environment do
+    logger = Logger.new(STDOUT)
     Video.armazenados.each do |video|
-      #begin
+      begin
         VideoProcessor.new(video).call
-        puts "Processed video #{video.remote_path}, extracted frames, and uploaded ZIP of images."
-     # rescue => e
-        puts "Failed to process video #{video.remote_path}: #{e.message}"
-      #end
+        logger.info("Vídeo #{video.remote_path} processado, frames extraídos e ZIP de imagens carregado.")
+      rescue => e
+        logger.error("Falha ao processar o vídeo #{video.remote_path}: #{e.message}")
+      end
     end
   end
 end
