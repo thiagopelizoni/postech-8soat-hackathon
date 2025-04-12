@@ -9,6 +9,7 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 gem "bootsnap", require: false
 
 group :development, :test do
+  gem "byebug"
   gem "debug", platforms: %i[ mri windows ]
   gem 'rspec-rails', require: false
   gem 'shoulda-matchers'
@@ -43,3 +44,5 @@ gem 'httparty'
 gem 'streamio-ffmpeg', '~> 3.0', '>= 3.0.2'
 
 gem 'aws-sdk-s3'
+
+gem 'rubyzip', '~> 2.3'
