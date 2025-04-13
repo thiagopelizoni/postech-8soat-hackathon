@@ -44,3 +44,5 @@ gem 'httparty'
 gem 'aws-sdk-s3'
 
 gem 'rubyzip', '~> 2.3'
+
+gem 'aws-sdk-rails', '~> 3.12'

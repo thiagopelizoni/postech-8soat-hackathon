@@ -24,4 +24,17 @@ namespace :video do
       end
     end
   end
+
+  desc "Enviar email com link do arquivo ZIP para ser baixado"
+  task email_notification: :environment do
+    logger = Logger.new(STDOUT)
+    Video.processados.each do |video|
+      begin
+        VideoMailer.email_notification(video).deliver_now
+        logger.info("Email enviado com sucesso para o vídeo #{video.remote_path}.")
+      rescue => e
+        logger.error("Falha ao enviar email para o vídeo #{video.remote_path}: #{e.message}")
+      end
+    end
+  end
 end
