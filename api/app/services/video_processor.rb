@@ -51,14 +51,14 @@ class VideoProcessor
     
     @logger.info("Iniciando extração de frames para: #{output_path}")
     
-    # Usando o comando FFmpeg diretamente devido a incompatibilidades com a gem 'streamio-ffmpeg'
+    # Usando o comando FFmpeg diretamente devido a problemas com a gem 'streamio-ffmpeg'
     command = [
       "ffmpeg", 
       "-i", @local_video_path, 
       "-vf", "fps=#{frame_rate}", 
       "-f", "image2", 
       "-pix_fmt", "yuvj420p", 
-      "-q:v", "2", # Qualidade da imagem (2 é alta qualidade)
+      "-q:v", "2", # Qualidade da imagem (2 é qualidade alta)
       output_path
     ]
     
@@ -115,7 +115,7 @@ class VideoProcessor
       key: zip_key,
       body: File.open(@zip_path)
     )
-    @video.update!(zip_images: "https://#{@bucket_name}.s3.amazonaws.com/#{zip_key}")
+    @video.update!(zip_images: "https://#{@bucket_name}/#{zip_key}")
     @zip_uploaded = true
   rescue => e
     @zip_uploaded = false
