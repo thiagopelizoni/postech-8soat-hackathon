@@ -24,5 +24,10 @@ module Api
         resource '*', headers: :any, methods: [:get, :post, :patch, :put, :delete, :options]
       end
     end
+
+    config.active_job.queue_adapter = :sidekiq
+
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: 'hackathon_session'
   end
 end

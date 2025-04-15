@@ -39,6 +39,7 @@ class VideosController < ApplicationController
     )
   
     if video.save
+      VideoUploadJob.perform_later(video.id)
       render json: video, status: :created
     else
       render json: { errors: video.errors.full_messages }, status: :unprocessable_entity
