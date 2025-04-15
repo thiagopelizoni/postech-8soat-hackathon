@@ -15,8 +15,8 @@ services:
     env_file:
       - .env
     depends_on:
-      db:
-        condition: service_healthy
+      - redis
+      - db
 
   db:
     image: mongo:latest
@@ -31,6 +31,26 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  redis:
+    image: redis:latest
+    restart: always
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+
+  sidekiq:
+    build:
+      context: .
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - ./api:/api
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+
 
   test-runner:
     build:
@@ -73,3 +93,4 @@ services:
 volumes:
   mongodb_data:
   coverage_data:
+  redis_data:

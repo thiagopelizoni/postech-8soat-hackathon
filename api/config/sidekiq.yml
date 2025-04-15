@@ -1,0 +1,4 @@
+:queues:
+  - [video_upload, 3]
+  - [video_process, 3]
+  - [video_notification, 1]
