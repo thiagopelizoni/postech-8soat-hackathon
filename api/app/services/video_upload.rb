@@ -24,7 +24,7 @@ class VideoUpload
 
     @video.update!(
       status: 'armazenado',
-      remote_path: "https://#{@bucket_name}.s3.amazonaws.com/#{upload_path}"
+      remote_path: "https://#{@bucket_name}/#{upload_path}"
     )
 
     cleanup_local_file if @video.remote_path.present?
@@ -34,6 +34,5 @@ class VideoUpload
 
   def cleanup_local_file
     File.delete(@video.local_path) if File.exist?(@video.local_path)
-    @video.update!(local_path: nil)
   end
 end
