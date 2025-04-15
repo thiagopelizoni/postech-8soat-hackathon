@@ -5,9 +5,9 @@ namespace :video do
     Video.recebidos.each do |video|
       begin
         VideoUpload.new(video).call
-        logger.info("Vídeo #{video.local_path} carregado para o S3, status atualizado para 'armazenado' e arquivo local removido.")
+        logger.info("Vídeo #{video.id} carregado para o S3, status atualizado para 'armazenado' e arquivo local removido.")
       rescue => e
-        logger.error("Falha ao carregar #{video.local_path} para o S3: #{e.message}")
+        logger.error("Falha ao carregar #{video.id} para o S3: #{e.message}")
       end
     end
   end
@@ -18,9 +18,9 @@ namespace :video do
     Video.armazenados.each do |video|
       begin
         VideoProcessor.new(video).call
-        logger.info("Vídeo #{video.remote_path} processado, frames extraídos e ZIP de imagens carregado.")
+        logger.info("Vídeo #{video.id} processado, frames extraídos e ZIP de imagens carregado.")
       rescue => e
-        logger.error("Falha ao processar o vídeo #{video.remote_path}: #{e.message}")
+        logger.error("Falha ao processar o vídeo #{video.id}: #{e.message}")
       end
     end
   end
@@ -31,9 +31,9 @@ namespace :video do
     Video.processados.each do |video|
       begin
         VideoMailer.email_notification(video).deliver_now
-        logger.info("Email enviado com sucesso para o vídeo #{video.remote_path}.")
+        logger.info("Email enviado com sucesso para o vídeo #{video.id}.")
       rescue => e
-        logger.error("Falha ao enviar email para o vídeo #{video.remote_path}: #{e.message}")
+        logger.error("Falha ao enviar email para o vídeo #{video.id}: #{e.message}")
       end
     end
   end
