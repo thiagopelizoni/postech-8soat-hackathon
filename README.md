@@ -1,6 +1,6 @@
-# Pos Tech FIAP | Software Arquitecture | 8SOAT | Hackathon API
+# Pos Tech FIAP | Software Arquitecture | 8SOAT | Hackathon
 
-API do Hackathon do curso de [Pós-Graduação em Arquitetura de Software da FIAP](https://postech.fiap.com.br/curso/software-architecture/).
+Hackathon do curso de [Pós-Graduação em Arquitetura de Software da FIAP](https://postech.fiap.com.br/curso/software-architecture/).
 
 Entrega da Fase 5 do Tech Challenge.
 
