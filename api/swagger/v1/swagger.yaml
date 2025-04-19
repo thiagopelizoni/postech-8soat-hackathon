@@ -78,7 +78,6 @@ paths:
       summary: Autentica um cliente via AWS Cognito
       tags:
       - Clientes
-      parameters: []
       responses:
         '200':
           description: Autenticação bem-sucedida
@@ -87,6 +86,7 @@ paths:
         '404':
           description: Usuário não encontrado no sistema
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -94,8 +94,10 @@ paths:
               properties:
                 email:
                   type: string
+                  description: E-mail do cliente
                 password:
                   type: string
+                  description: Senha do cliente
               required:
               - email
               - password
@@ -123,12 +125,6 @@ paths:
       - Videos
       security:
       - bearerAuth: []
-      parameters:
-      - name: Authorization
-        in: header
-        description: Token de autenticação
-        schema:
-          type: string
       description: |
         Exemplo de cURL para envio do vídeo: \
         curl -X POST "http://localhost:3000/videos" \
@@ -148,8 +144,13 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: file
-        description: Arquivo de vídeo a ser enviado
+              type: object
+              properties:
+                arquivo:
+                  type: string
+                  format: binary
+              required:
+              - arquivo
   "/videos/{id}":
     get:
       summary: Obtém detalhes de um vídeo do cliente autenticado
