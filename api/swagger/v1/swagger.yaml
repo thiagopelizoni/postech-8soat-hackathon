@@ -6,7 +6,7 @@ info:
 paths:
   "/clientes":
     get:
-      summary: Lista todos os clientes
+      summary: Lista todos os Clientes
       tags:
       - Clientes
       responses:

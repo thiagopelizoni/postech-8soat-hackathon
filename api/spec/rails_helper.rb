@@ -26,5 +26,4 @@ end
 SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 SimpleCov.start do
   add_filter '/spec/'
-  add_filter '/features/'
 end
