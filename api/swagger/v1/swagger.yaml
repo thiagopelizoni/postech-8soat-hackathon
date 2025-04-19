@@ -101,9 +101,11 @@ paths:
               - password
   "/videos":
     get:
-      summary: Lista todos os vídeos
+      summary: Lista todos os vídeos do cliente autenticado
       tags:
       - Videos
+      security:
+      - bearerAuth: []
       responses:
         '200':
           description: Lista de vídeos retornada com sucesso
@@ -113,10 +115,14 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Video"
+        '401':
+          description: Não autorizado
     post:
       summary: Cria um novo vídeo
       tags:
       - Videos
+      security:
+      - bearerAuth: []
       parameters:
       - name: Authorization
         in: header
@@ -146,9 +152,11 @@ paths:
         description: Arquivo de vídeo a ser enviado
   "/videos/{id}":
     get:
-      summary: Obtém detalhes de um vídeo
+      summary: Obtém detalhes de um vídeo do cliente autenticado
       tags:
       - Videos
+      security:
+      - bearerAuth: []
       parameters:
       - name: id
         in: path
@@ -159,48 +167,22 @@ paths:
       responses:
         '200':
           description: Vídeo encontrado
-        '404':
-          description: Vídeo não encontrado
-    patch:
-      summary: Atualiza um vídeo
-      tags:
-      - Videos
-      parameters:
-      - name: id
-        in: path
-        description: ID do Vídeo
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: Vídeo atualizado com sucesso
-        '404':
-          description: Vídeo não encontrado
-        '422':
-          description: Dados inválidos
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/VideoInput"
-    delete:
-      summary: Remove um vídeo
-      tags:
-      - Videos
-      parameters:
-      - name: id
-        in: path
-        description: ID do Vídeo
-        required: true
-        schema:
-          type: string
-      responses:
-        '204':
-          description: Vídeo removido com sucesso
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Video"
+        '401':
+          description: Não autorizado
+        '403':
+          description: Acesso não autorizado ao vídeo
         '404':
           description: Vídeo não encontrado
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Cliente:
       type: object

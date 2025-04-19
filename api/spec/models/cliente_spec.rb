@@ -27,13 +27,5 @@ RSpec.describe Cliente, type: :model do
       end
     end
 
-    # it "não é válido com um email inválido" do
-    #   emails_invalidos = ["usuario", "usuario@", "usuario@com", "@dominio.com", "usuario@.com", "usuario@dominio,com"]
-    #   emails_invalidos.each do |email_invalido|
-    #     subject.email = email_invalido
-    #     expect(subject).not_to be_valid
-    #     expect(subject.errors[:email]).to include("is invalid")
-    #   end
-    # end
   end
 end

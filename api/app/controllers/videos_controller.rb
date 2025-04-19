@@ -1,14 +1,18 @@
 class VideosController < ApplicationController
-  before_action :authenticate_cliente, only: [:create]
-  before_action :set_video, only: %i[show update destroy]
+  before_action :authenticate_cliente, only: [:index, :show, :create]
+  before_action :set_video, only: %i[show]
 
   def index
-    videos = Video.all
+    videos = Video.where(cliente: @cliente)
     render json: videos, status: :ok
   end
 
   def show
-    render json: @video, status: :ok
+    if @video.cliente == @cliente
+      render json: @video, status: :ok
+    else
+      render json: { error: 'Acesso não autorizado ao vídeo' }, status: :forbidden
+    end
   end
 
   def create
@@ -44,20 +48,6 @@ class VideosController < ApplicationController
     else
       render json: { errors: video.errors.full_messages }, status: :unprocessable_entity
     end
-  end
-
-  def update
-    if @video.update(video_params)
-      render json: @video, status: :ok
-    else
-      render json: { errors: @video.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
-  def destroy
-    File.delete(@video.caminho_arquivo) if File.exist?(@video.caminho_arquivo)
-    @video.destroy
-    head :no_content
   end
 
   private
