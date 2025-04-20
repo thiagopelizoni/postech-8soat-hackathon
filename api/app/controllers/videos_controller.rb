@@ -63,8 +63,4 @@ class VideosController < ApplicationController
   rescue Mongoid::Errors::DocumentNotFound
     render json: { error: 'Vídeo não encontrado' }, status: :not_found
   end
-
-  def video_params
-    params.require(:video).permit(:nome)
-  end
 end
