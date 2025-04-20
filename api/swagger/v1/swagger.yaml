@@ -9,6 +9,8 @@ paths:
       summary: Lista todos os Clientes
       tags:
       - Clientes
+      security:
+      - bearerAuth: []
       responses:
         '200':
           description: Lista de clientes retornada com sucesso
@@ -22,6 +24,8 @@ paths:
       summary: Cria um novo cliente
       tags:
       - Clientes
+      security:
+      - bearerAuth: []
       parameters: []
       responses:
         '201':
@@ -38,6 +42,8 @@ paths:
       summary: Obtém detalhes de um cliente
       tags:
       - Clientes
+      security:
+      - bearerAuth: []
       parameters:
       - name: id
         in: path
@@ -54,6 +60,8 @@ paths:
       summary: Atualiza um cliente
       tags:
       - Clientes
+      security:
+      - bearerAuth: []
       parameters:
       - name: id
         in: path

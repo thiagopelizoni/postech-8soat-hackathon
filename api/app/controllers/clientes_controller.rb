@@ -1,5 +1,9 @@
 class ClientesController < ApplicationController
+  include Authenticatable
+
   before_action :set_cliente, only: %i[show update]
+  before_action :authorize_admin, only: %i[create update]
+  skip_before_action :authenticate_cliente, only: %i[login]
 
   def index
     clientes = Cliente.all
@@ -84,6 +88,12 @@ class ClientesController < ApplicationController
  
 
   private
+
+  def authorize_admin
+    unless current_cliente&.admin?
+      render json: { error: 'Acesso não autorizado' }, status: :forbidden
+    end
+  end
 
   def set_cliente
     @cliente = Cliente.find(params[:id])

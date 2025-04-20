@@ -52,7 +52,6 @@ services:
       - redis
       - db
 
-
   test-runner:
     build:
       context: .
