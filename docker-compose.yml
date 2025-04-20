@@ -56,8 +56,7 @@ services:
     build:
       context: .
     command: >
-      bash -c "bundle exec rspec &&
-      bundle exec cucumber"
+      bash -c "bundle exec rspec --format documentation --color --profile"
     volumes:
       - ./api:/api
       - coverage_data:/api/coverage
@@ -79,7 +78,7 @@ services:
         condition: service_started
     command: >
       sonar-scanner
-      -Dsonar.projectKey=thiagopelizoni_postech-8soat-cliente
+      -Dsonar.projectKey=thiagopelizoni_postech-8soat-hackathon
       -Dsonar.organization=thiagopelizoni
       -Dsonar.host.url=https://sonarcloud.io
       -Dsonar.sources=/usr/src/app
