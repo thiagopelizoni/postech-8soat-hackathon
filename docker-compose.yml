@@ -42,6 +42,7 @@ services:
   sidekiq:
     build:
       context: .
+    restart: always
     command: bundle exec sidekiq -C config/sidekiq.yml
     volumes:
       - ./api:/api
