@@ -19,19 +19,23 @@ class VideosController < ApplicationController
 
   def create
     return render json: { error: "Arquivo de vídeo é obrigatório" }, status: :bad_request unless params[:arquivo]
-  
+
     arquivo = params[:arquivo]
-    
     extensao_arquivo = File.extname(arquivo.original_filename)
+
+    unless extensao_arquivo.downcase == '.mp4'
+      return render json: { error: "Apenas arquivos do tipo MP4 são permitidos" }, status: :unprocessable_entity
+    end
+
     nome_arquivo = "#{SecureRandom.uuid}#{extensao_arquivo}"
     caminho_arquivo = Rails.root.join('tmp', nome_arquivo)
-  
+
     File.open(caminho_arquivo, 'wb') do |file|
       file.write(arquivo.read)
     end
-  
+
     metadados = FFMPEG::Movie.new(caminho_arquivo.to_s)
-  
+
     video = Video.new(
       local_path: caminho_arquivo.to_s,
       metadados: {
@@ -43,7 +47,7 @@ class VideosController < ApplicationController
       },
       cliente: @cliente
     )
-  
+
     if video.save
       VideoUploadJob.perform_later(video.id)
       render json: video, status: :created
