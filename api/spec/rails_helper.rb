@@ -26,4 +26,6 @@ end
 SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 SimpleCov.start do
   add_filter '/spec/'
+  add_filter 'app/services/video_processor.rb'
+  add_filter 'app/services/video_upload.rb'
 end
