@@ -10,11 +10,10 @@ RSpec.describe VideoUpload, type: :service do
   end
   
   let(:video) do
-    # Define o double para video com métodos necessários
     double("Video", 
       local_path: dummy_mp4, 
       update!: nil,
-      remote_path: nil  # inicialmente nil; será atualizado durante a chamada
+      remote_path: nil
     )
   end
   
@@ -31,11 +30,9 @@ RSpec.describe VideoUpload, type: :service do
     ))
     allow(Aws::S3::Client).to receive(:new).and_return(s3_client_double)
     allow(s3_client_double).to receive(:put_object)
-    # Stub para update! que altera o remote_path, simulando o comportamento esperado
     allow(video).to receive(:update!) do |params|
       allow(video).to receive(:remote_path).and_return(params[:remote_path])
     end
-    # Garante que o arquivo dummy exista
     File.write(dummy_mp4, "dummy content")
   end
 
@@ -59,7 +56,6 @@ RSpec.describe VideoUpload, type: :service do
       
       subject.call
       
-      # Verifica que o arquivo local foi removido
       expect(File).not_to exist(dummy_mp4)
     end
   end

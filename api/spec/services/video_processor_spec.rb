@@ -12,9 +12,8 @@ RSpec.describe VideoProcessor, type: :service do
   end
   
   let(:video) do
-    # Define remote_path dummy e metadados com video_stream simulando "30 fps"
     double("Video",
-      id: 123, # Adiciona o método id ao double
+      id: 123,
       remote_path: "https://test-bucket/path/to/dummy_video.mp4",
       metadados: { 'video_stream' => "30 fps" },
       update!: nil
@@ -35,33 +34,22 @@ RSpec.describe VideoProcessor, type: :service do
     ))
     allow(Aws::S3::Client).to receive(:new).and_return(s3_client_double)
 
-    # Stub para download do vídeo: simula escrita do conteúdo (usando bloco)
     allow(s3_client_double).to receive(:get_object) do |args, &block|
       block.call("dummy video content")
     end
 
-    # Stub para o upload do ZIP
     allow(s3_client_double).to receive(:put_object)
     allow(video).to receive(:update!)
-    
-    # Stub para simular a execução do ffmpeg via backticks
-    allow(subject).to receive(:`).and_return("ffmpeg success")
-    allow($?).to receive(:success?).and_return(true)
-    
-    # Força o Dir.tmpdir para um diretório controlado
-    allow(Dir).to receive(:tmpdir).and_return(tmp_dir)
-    
-    # Cria um arquivo dummy que simula o vídeo baixado
+    allow(subject).to receive(:`).and.return("ffmpeg success")
+    allow($?).to receive(:success?).and.return(true)
+    allow(Dir).to receive(:tmpdir).and.return(tmp_dir)
+
     @downloaded_video = File.join(tmp_dir, File.basename(video.remote_path))
     File.write(@downloaded_video, "dummy video content")
-    
-    # Stub para garantir que a extração de frames retorne um frame dummy
+
     dummy_frame = File.join(tmp_dir, "frame_0001.jpg")
     File.write(dummy_frame, "dummy frame")
-    allow(Dir).to receive(:glob).and_return([dummy_frame])
-    
-    # Garante que $? não seja nil, stube o success? com valor true
-    allow($?).to receive(:success?).and_return(true)
+    allow(Dir).to receive(:glob).and.return([dummy_frame])
   end
 
   after do
@@ -78,15 +66,14 @@ RSpec.describe VideoProcessor, type: :service do
 
         subject.call
 
-        # Verifica que os arquivos temporários foram limpos
         expect(File).not_to exist(@downloaded_video)
       end
     end
 
     context "quando a extração de frames falha" do
       before do
-        allow(subject).to receive(:`).and_return("error output")
-        allow($?).to receive(:success?).and_return(false)
+        allow(subject).to receive(:`).and.return("error output")
+        allow($?).to receive(:success?).and.return(false)
       end
 
       it "lança RuntimeError com mensagem de falha na extração" do
