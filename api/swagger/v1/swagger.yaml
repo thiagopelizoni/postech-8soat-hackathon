@@ -206,6 +206,10 @@ components:
         password:
           type: string
           description: Senha do Cliente
+        admin:
+          type: boolean
+          description: Indica se o cliente é administrador
+          default: false
       required:
       - nome
       - email
