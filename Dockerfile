@@ -38,7 +38,7 @@ WORKDIR $APP_HOME
 
 ADD ./api .
 
-RUN gem install bundler && bundle install --jobs 4 --retry 3
+RUN gem install bundler && bundle install --jobs $(nproc) --retry 3
 
 EXPOSE 3000
 
