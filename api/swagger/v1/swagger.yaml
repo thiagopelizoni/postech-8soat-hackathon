@@ -135,7 +135,7 @@ paths:
       - bearerAuth: []
       description: |
         Exemplo de cURL para envio do vídeo: \
-        curl -X POST "http://localhost:3000/videos" \
+        curl -X POST "https://hackathon.gazetapress.com/videos" \
           -H "Authorization: Bearer SEU_TOKEN_AQUI" \
           -H "Content-Type: multipart/form-data" \
           -F "arquivo=@/caminho/para/seu/video.mp4"
