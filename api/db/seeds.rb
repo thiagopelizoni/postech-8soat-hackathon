@@ -11,11 +11,14 @@ credentials = Aws::Credentials.new(
 
 cognito_client = Aws::CognitoIdentityProvider::Client.new(region: AWS_REGION, credentials: credentials)
 
-clientes = []
+clientes = [
+  {"nome": "Thiago Pelizoni",	"email": "thiago.pelizoni@gmail.com"},
+  {"nome": "Hackathon Client", "email": "hackathon@gazetapress.com", "admin": true}
+]
 
-10.times do |i|
-  nome = Faker::Name.name
-  email = Faker::Internet.email
+clientes.each do |cliente|
+  nome = cliente[:nome]
+  email = cliente[:email]
   password = ENV.fetch('COGNITO_PASSWORD')
 
   begin
@@ -44,14 +47,13 @@ clientes = []
     retry
   end
 
-  clientes << {
-    nome: nome,
-    email: email
-  }
-
-  sleep 0.2 if i % 10 == 0
+  sleep 0.2
 end
 
-Cliente.create!(clientes)
+begin
+  Cliente.create!(clientes)
+rescue ActiveRecord::RecordInvalid => e
+  puts "Erro ao criar clientes no banco: #{e.message}"
+end
 
 puts "Clientes gerados e cadastrados no Cognito sem envio de e-mail!"
