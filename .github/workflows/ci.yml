@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Build containers
+        run: docker compose build
+      - name: Run tests and generate coverage.xml
+        run: docker compose run test-runner
+      - name: Post commit data
+        run: |
+          curl -X POST https://ci-hackathon.gazetapress.com/ \
+          -H 'Content-Type: application/json' \
+          -d '${{ toJson(github.event) }}'
